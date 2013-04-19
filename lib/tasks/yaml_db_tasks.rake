@@ -31,7 +31,7 @@ namespace :db do
     desc "Load contents of db/data.extension (defaults to yaml) into database"
     task :load => :environment do
       format_class = ENV['class'] || "YamlDb::Helper"
-      truncate = ENV['truncate'|| true
+      truncate = ENV['truncate'] || true
       helper = format_class.constantize
       SerializationHelper::Base.new(helper).load(db_dump_data_file helper.extension, truncate)
     end
