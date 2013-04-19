@@ -31,15 +31,17 @@ namespace :db do
     desc "Load contents of db/data.extension (defaults to yaml) into database"
     task :load => :environment do
       format_class = ENV['class'] || "YamlDb::Helper"
+      truncate = ENV['truncate'|| true
       helper = format_class.constantize
-      SerializationHelper::Base.new(helper).load(db_dump_data_file helper.extension)
+      SerializationHelper::Base.new(helper).load(db_dump_data_file helper.extension, truncate)
     end
 
     desc "Load contents of db/data_dir into database"
     task :load_dir  => :environment do
       dir = ENV['dir'] || "base"
+      truncate = ENV['truncate'] || true
       format_class = ENV['class'] || "YamlDb::Helper"
-      SerializationHelper::Base.new(format_class.constantize).load_from_dir dump_dir("/#{dir}")
+      SerializationHelper::Base.new(format_class.constantize).load_from_dir(dump_dir("/#{dir}"), truncate)
     end
   end
 end
