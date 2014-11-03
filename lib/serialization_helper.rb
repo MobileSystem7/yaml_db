@@ -3,10 +3,12 @@ module SerializationHelper
   class Base
     attr_reader :extension
 
-    def initialize(helper)
+    def initialize(helper, tables = nil)
       @dumper = helper.dumper
+      @tables = tables || @dumper.tables
       @loader = helper.loader
       @extension = helper.extension
+      @tables = tables || @dumper.tables      
     end
 
     def dump(filename)
@@ -17,8 +19,8 @@ module SerializationHelper
 
     def dump_to_dir(dirname)
       Dir.mkdir(dirname)
-      tables = @dumper.tables
-      tables.each do |table|
+      @tables.each do |table|
+        puts "Dumping #{table}"
         io = File.new "#{dirname}/#{table}.#{@extension}", "w"
         @dumper.before_table(io, table)
         @dumper.dump_table io, table
@@ -37,7 +39,9 @@ module SerializationHelper
         if filename =~ /^[.]/
           next
         end
+        puts "Loading #{filename}"
         @loader.load(File.new("#{dirname}/#{filename}", "r"), truncate)
+        puts "#{filename} Loaded"        
       end   
     end
 
