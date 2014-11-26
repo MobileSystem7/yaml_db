@@ -36,7 +36,7 @@ module SerializationHelper
 
     def load_from_dir(dirname, truncate = true)
       Dir.entries(dirname).each do |filename|
-        if filename =~ /^[.]/
+        unless filename =~ /.yml/
           next
         end
         puts "Loading #{filename}"
